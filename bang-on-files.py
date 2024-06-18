@@ -20,7 +20,7 @@ os.makedirs(base_dir, exist_ok=True)
 
 target_file = os.path.join(base_dir, "target.dat")
 
-end_time = time.time() + 1000
+end_time = time.time() + (36 * 60 * 60)
 
 iteration_count = 0
 replaced_count_early = 0
