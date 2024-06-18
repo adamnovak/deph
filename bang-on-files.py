@@ -9,12 +9,12 @@ from datetime import datetime
 import collections
 
 if len(sys.argv) != 2:
-    print("Specify a target base directory")
+    sys.stderr.write("Specify a target base directory\n")
     sys.exit(1)
 
 base_dir = sys.argv[1]
 
-print(f"Start on {socket.gethostname()} at {datetime.now()}")
+sys.stderr.write(f"Start on {socket.gethostname()} at {datetime.now()}\n")
 
 os.makedirs(base_dir, exist_ok=True)
 
@@ -37,7 +37,10 @@ while time.time() < end_time:
         fd = os.open(target_file, os.O_CREAT | os.O_WRONLY)
     except Exception as e:
         # Found an error. Record it.
-        open_errors[str(e)] += 1
+        error_key = str(e)
+        if open_errors[error_key] == 0:
+            sys.stderr.write(f"{socket.gethostname()}: new file opening error: {error_key}\n")
+        open_errors[error_key] += 1
         # Don't try and go on if we couldn't open the file
         continue
 
@@ -75,7 +78,10 @@ while time.time() < end_time:
     
     except Exception as e:
         # Found an error. Record it.
-        errors[str(e)] += 1
+        error_key = str(e)
+        if errors[error_key] == 0:
+            sys.stderr.write(f"{socket.gethostname()}: new error: {error_key}\n")
+        errors[error_key] += 1
     finally:    
         os.close(fd)
 
@@ -83,11 +89,11 @@ while time.time() < end_time:
 
     iteration_count += 1
 
-print(f"{socket.gethostname()}: {iteration_count} iterations, {replaced_count_early} times file replaced early, {replaced_count_late} times file replaced late, {deleted_count} successful deletions, {vanished_count} times file vanished")
+sys.stderr.write(f"{socket.gethostname()}: {iteration_count} iterations, {replaced_count_early} times file replaced early, {replaced_count_late} times file replaced late, {deleted_count} successful deletions, {vanished_count} times file vanished\n")
 for k, v in open_errors.items():
-    print(f"{socket.gethostname()}: when opening: {v} instances of error: {k}")
+    sys.stderr.write(f"{socket.gethostname()}: when opening: {v} instances of error: {k}\n")
 for k, v in errors.items():
-    print(f"{socket.gethostname()}: {v} instances of error: {k}")
+    sys.stderr.write(f"{socket.gethostname()}: {v} instances of error: {k}\n")
     
 
 
