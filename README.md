@@ -1,6 +1,6 @@
 # deph: kill Ceph
 
-⚠️**Dangerous Code Ahead!**⚠️
+⚠️ **Dangerous Code Ahead!** ⚠️
 
 This repo contains scripts to trigger [Ceph MDS deadlocks](https://tracker.ceph.com/issues/65607), on a Slurm cluster. These are useful for reproducing the deadlock problem on demaind, in order to obtain debug logs, find the deadlocking code in the Slurm MDS, and fix whatever is causing the deadlock.
 
