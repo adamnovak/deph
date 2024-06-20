@@ -26,6 +26,10 @@ The Slurm batch script, `file-deph.sh`, runs the `bang-on-files.py` script on 10
 
 I *think* it will lock up every time, but I'm not going to test it repeatedly before our Ceph admin gets in to work for the day. Bad things might happen to the cluster overall if many MDS processes or threads are deadlocked.
 
+## How it Works
+
+The code repeatedly creates, destroys, locks, unlocks, and stats a file in the provided directory. The locking and unlocking (with `fcntl` advisory locks) seems essential to reproducing the deadlock; if you run in `nolock` mode I *think* that no deadlock will occur.
+
 ## Help I Broke Something
 
 Restarting the Ceph MDS(es) *should* restore your filesystem to full functionality. If it doesn't, I unfortunately can't help.
